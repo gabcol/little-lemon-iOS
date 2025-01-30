@@ -58,7 +58,7 @@ struct HomeView: View {
             
             
             Text("ORDER FOR DELIVERY!")
-                .font(.sectionTitle())
+                .font(Font.custom("Karla Regular", size: 18).weight(.black))
                 .foregroundColor(.highlightColor2)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top)
