@@ -11,42 +11,25 @@ struct ProfileView: View {
     
     @EnvironmentObject var userPreferences: MyUserPreferences
     
-    @State private var valuesAreUpdated = false
-        
-    //    @State private var orderStatuses = true
-    //    @State private var passwordChanges = true
-    //    @State private var specialOffers = true
-    //    @State private var newsletter = true
-        
-        @State private var firstName = ""
-        @State private var lastName = ""
-        @State private var email = ""
-     //   @State private var phoneNumber = ""
-        
-
+    @State private var validFields: Bool = false
+    
+    
+    @State private var responseMessage: String = " "
+    
+    
+    @State private var firstName = ""
+    @State private var lastName = ""
+    @State private var email = ""
+   
     var body: some View {
+     
         
-        
-  
-
-//struct UserProfile: View {
-  //  @StateObject private var viewModel = ViewModel()
-    
-//    @Environment(\.presentationMode) var presentation
-    
-//    @State private var orderStatuses = true
-//    @State private var passwordChanges = true
-//    @State private var specialOffers = true
-//    @State private var newsletter = true
-    
-  
-//    var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-          //  NavigationLink(destination: Onboarding(), isActive: $isLoggedOut) { }
+            
             VStack(spacing: 5) {
                 VStack {
                     Text("Avatar")
-             //           .onboardingTextStyle()
+                        .onboardingTextStyle()
                     HStack(spacing: 0) {
                         Image("profile")
                             .resizable()
@@ -54,143 +37,118 @@ struct ProfileView: View {
                             .frame(maxHeight: 75)
                             .clipShape(Circle())
                             .padding(.trailing)
-//                        Button("Change") { }
-//                            .buttonStyle(ButtonStylePrimaryColor1())
-//                        Button("Remove") { }
-//                            .buttonStyle(ButtonStylePrimaryColorReverse())
+           
                         Spacer()
                     }
                 }
                 
                 VStack{
                     Text("First name")
-                 //       .onboardingTextStyle()
+                    //       .onboardingTextStyle()
                     TextField("First Name", text: $firstName)
                 }
                 
                 VStack {
                     Text("Last name")
-                //        .onboardingTextStyle()
+                    //        .onboardingTextStyle()
                     TextField("Last Name", text: $lastName)
                     
                 }
                 
                 VStack {
                     Text("E-mail")
-                   //     .onboardingTextStyle()
+                    //     .onboardingTextStyle()
                     TextField("E-mail", text: $email)
                         .keyboardType(.emailAddress)
                 }
                 
-//                VStack {
-//                    Text("Phone number")
-//                 //       .onboardingTextStyle()
-//                    TextField("Phone number", text: $phoneNumber)
-//                        .keyboardType(.default)
-//                }
+            
             }
             .textFieldStyle(.roundedBorder)
             .disableAutocorrection(true)
             .padding()
             .onChange(of: firstName, initial: false) { oldValue, newValue in
-               // if oldValue != newValue {
-                    valuesAreUpdated = true
-              //  }
+                
+                validateFields()
+                
             }
             .onChange(of: lastName, initial: false) { oldValue, newValue in
-                 
-                    valuesAreUpdated = true
-                 
+                
+                validateFields()
+                
             }
             .onChange(of: email, initial: false) { oldValue, newValue in
                 
-                    valuesAreUpdated = true
+                //check email
                 
+                validateFields()
             }
             
-//            Text("Email notifications")
-//                .font(.regularText())
-//                .foregroundColor(.primaryColor1)
-//            VStack {
-//                Toggle("Order statuses", isOn: $orderStatuses)
-//                Toggle("Password changes", isOn: $passwordChanges)
-//                Toggle("Special offers", isOn: $specialOffers)
-//                Toggle("Newsletter", isOn: $newsletter)
-//            }
-//            .padding()
-//            .font(Font.leadText())
-//            .foregroundColor(.primaryColor1)
-//
+            
+            Text(responseMessage).foregroundStyle(.red)
+            
+            
+            
             Button("Log out") {
                 
-              
                 userPreferences.userData = nil
                 userPreferences.isLoggedIn = false
                 
-                 
             }
-//            .buttonStyle(ButtonStyleYellowColorWide())
+            .buttonStyle(ButtonStyleYellowColorWide())
             Spacer(minLength: 20)
             
             
             Button("Save") {
+                
+                if firstName.isEmpty || lastName.isEmpty || email.isEmpty {
+                    responseMessage = "Please fill all fields"
+                    return
+                }
                 let userData = UserData(firstName: firstName, lastName: lastName, email: email)
                 userPreferences.userData = userData
-            }.disabled(!valuesAreUpdated)
-            
-            
-//            HStack {
-//                Button("Discard Changes") {
-//                    firstName = viewModel.firstName
-//                    lastName = viewModel.lastName
-//                    email = viewModel.email
-//                    phoneNumber = viewModel.phoneNumber
-//                    
-////                    orderStatuses = viewModel.orderStatuses
-////                    passwordChanges = viewModel.passwordChanges
-////                    specialOffers = viewModel.specialOffers
-////                    newsletter = viewModel.newsletter
-////                    self.presentation.wrappedValue.dismiss()
-//                }
-////                .buttonStyle(ButtonStylePrimaryColorReverse())
-//                Button("Save changes") {
-//                    if viewModel.validateUserInput(firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber) {
-//                        UserDefaults.standard.set(firstName, forKey: kFirstName)
-//                        UserDefaults.standard.set(lastName, forKey: kLastName)
-//                        UserDefaults.standard.set(email, forKey: kEmail)
-//                        UserDefaults.standard.set(phoneNumber, forKey: kPhoneNumber)
-//                        UserDefaults.standard.set(orderStatuses, forKey: kOrderStatuses)
-//                        UserDefaults.standard.set(passwordChanges, forKey: kPasswordChanges)
-//                        UserDefaults.standard.set(specialOffers, forKey: kSpecialOffers)
-//                        UserDefaults.standard.set(newsletter, forKey: kNewsletter)
-//                        self.presentation.wrappedValue.dismiss()
-//                    }
-//                }
-////                .buttonStyle(ButtonStylePrimaryColor1())
-//            }
-//            if viewModel.errorMessageShow {
-//                withAnimation() {
-//                    Text(viewModel.errorMessage)
-//                        .foregroundColor(.red)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .padding(.leading)
-//                }
-//            }
+            }
+            .buttonStyle(ButtonStylePrimaryColor1())
+            .disabled(!validFields)
+        
             
         }
         .onAppear {
             firstName = userPreferences.userData?.firstName ?? "" // viewModel.firstName
             lastName = userPreferences.userData?.lastName ?? "" //viewModel.lastName
             email = userPreferences.userData?.email ?? "" //viewModel.email
-            valuesAreUpdated = false
-   //         phoneNumber = viewModel.phoneNumber
-            
-//            orderStatuses = viewModel.orderStatuses
-//            passwordChanges = viewModel.passwordChanges
-//            specialOffers = viewModel.specialOffers
-//            newsletter = viewModel.newsletter
+ 
         }
         .navigationTitle(Text("Personal information"))
         .navigationBarTitleDisplayMode(.inline)
     }
+    
+    
+    func validateFields() {
+        if firstName.isEmpty || lastName.isEmpty ||  !checkEmail(newValue: email) {
+            validFields = false
+            responseMessage  = "Please fill all fields"
+        }
+        else{
+            validFields = true
+            responseMessage  = " "
+        }
+    }
+
+    func checkEmail(newValue: String) -> Bool{
+        
+        let myregex = #"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"#
+            
+            
+            if newValue.range(of: myregex, options: .regularExpression, range: nil, locale: nil) != nil {
+               
+                return true
+            } else {
+                return false
+            }
+               
+     }
+    
+    
+    
 }

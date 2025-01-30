@@ -34,14 +34,6 @@ class MyUserPreferences : ObservableObject {
     }
     
     
-//    func setUserData(userData: UserData){
-//        
-//    }
-//    
-//    func getUserData(){
-//        
-//    }
-    
 }
 
 

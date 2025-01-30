@@ -29,17 +29,19 @@ struct PersistenceController {
     }()
 
     
-    func clear() {
+    func clearDataBase() {
     
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "MenuLittleLemon")
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        var menu = try? container.persistentStoreCoordinator.execute(deleteRequest, with: container.viewContext)
-        //print("menu: \(menu.take())")
-        
-        let fetchRequestMenuItem: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "MenuItem")
-        let deleteRequestMenuItem = NSBatchDeleteRequest(fetchRequest: fetchRequestMenuItem)
-        var menuItem = try? container.persistentStoreCoordinator.execute(deleteRequestMenuItem, with: container.viewContext)
-        
+//        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "MenuLittleLemon")
+//        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+//        var menu = try? container.persistentStoreCoordinator.execute(deleteRequest, with: container.viewContext)
+//
+//
+//        let fetchRequestMenuItem: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "MenuItem")
+//        let deleteRequestMenuItem = NSBatchDeleteRequest(fetchRequest: fetchRequestMenuItem)
+//        var menuItem = try? container.persistentStoreCoordinator.execute(deleteRequestMenuItem, with: container.viewContext)
+//        
+        let data = try? container.viewContext.fetch(MenuItem.fetchRequest())
+        data?.forEach({ container.viewContext.delete($0) })
         try? container.viewContext.save()
         
     }

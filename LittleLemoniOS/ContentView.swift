@@ -12,8 +12,6 @@ struct ContentView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
- 
-    
     //share preferences
     @EnvironmentObject var userPreference: MyUserPreferences
     
@@ -21,46 +19,16 @@ struct ContentView: View {
     
     var body: some View {
         
-        Text("Hello")
-        
         
         NavigationView {
            
             if userPreference.isLoggedIn {
-                HomeView().environment(\.managedObjectContext, viewContext)
+                HomeView().environment(\.managedObjectContext, viewContext).environmentObject(userPreference)
             }
             else{
                 OnboardingView().environmentObject(userPreference)
             }
-            
-            
         }
-        
-        
-        
-        //        NavigationView {
-        //            List {
-        //                ForEach(items) { item in
-        //                    NavigationLink {
-        //                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-        //                    } label: {
-        //                        Text(item.timestamp!, formatter: itemFormatter)
-        //                    }
-        //                }
-        //                .onDelete(perform: deleteItems)
-        //            }
-        //            .toolbar {
-        //                ToolbarItem(placement: .navigationBarTrailing) {
-        //                    EditButton()
-        //                }
-        //                ToolbarItem {
-        //                    Button(action: addItem) {
-        //                        Label("Add Item", systemImage: "plus")
-        //                    }
-        //                }
-        //            }
-        //            Text("Select an item")
-        //        }
     }
     
     
@@ -106,6 +74,3 @@ struct ContentView: View {
     
 }
 
-#Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-}

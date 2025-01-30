@@ -15,12 +15,14 @@ struct OnboardingView: View {
     @State var surname: String = ""
     @State var email: String = ""
     
-    @State var responseMessage: String = ""
+    @State var responseMessage: String = " "
     
     var body: some View {
-        
+
         VStack {
-            Text("Onboarding")
+            Header().environmentObject(userPreferences)
+            
+            Hero()
          
             HStack{
                 Text("Name")
