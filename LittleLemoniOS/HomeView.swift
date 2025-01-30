@@ -70,7 +70,7 @@ struct HomeView: View {
                     Toggle("Desserts", isOn: $dessertsIsEnabled)
                     Toggle("Drinks", isOn: $drinksIsEnabled)
                 }
-                .toggleStyle(MyToggleStyle())
+                .toggleStyle(CustomToggleStyle())
                 .padding(.horizontal)
             }
             
@@ -119,5 +119,26 @@ struct HomeView: View {
         let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [search, starters, mains, desserts, drinks])
     
         return compoundPredicate
+    }
+}
+
+
+struct CustomToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button {
+            configuration.isOn.toggle()
+        } label: {
+            HStack {
+                configuration.label
+            }
+        }
+        .foregroundColor(Color.primaryColor1)
+        .padding(5)
+        .background {
+            if configuration.isOn {
+                Color.highlightColor1
+            }
+        }
+        .cornerRadius(8)
     }
 }

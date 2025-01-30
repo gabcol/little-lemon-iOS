@@ -31,7 +31,7 @@ struct ProfileView: View {
                     Text("Avatar")
                         .onboardingTextStyle()
                     HStack(spacing: 0) {
-                        Image("profile")
+                        Image("Profile")
                             .resizable()
                             .aspectRatio( contentMode: .fit)
                             .frame(maxHeight: 75)
@@ -42,22 +42,24 @@ struct ProfileView: View {
                     }
                 }
                 
+                Spacer()
+                
                 VStack{
                     Text("First name")
-                    //       .onboardingTextStyle()
+                           .onboardingTextStyle()
                     TextField("First Name", text: $firstName)
                 }
                 
                 VStack {
                     Text("Last name")
-                    //        .onboardingTextStyle()
+                          .onboardingTextStyle()
                     TextField("Last Name", text: $lastName)
                     
                 }
                 
                 VStack {
                     Text("E-mail")
-                    //     .onboardingTextStyle()
+                        .onboardingTextStyle()
                     TextField("E-mail", text: $email)
                         .keyboardType(.emailAddress)
                 }
@@ -78,17 +80,38 @@ struct ProfileView: View {
                 
             }
             .onChange(of: email, initial: false) { oldValue, newValue in
-                
-                //check email
-                
+            
                 validateFields()
             }
             
             
             Text(responseMessage).foregroundStyle(.red)
+
+            HStack{
+                Button("Save") {
+                    
+                    if firstName.isEmpty || lastName.isEmpty || email.isEmpty {
+                        responseMessage = "Please fill all fields"
+                        return
+                    }
+                    let userData = UserData(firstName: firstName, lastName: lastName, email: email)
+                    userPreferences.userData = userData
+                }
+                .buttonStyle(ButtonStylePrimaryColor1())
+                .disabled(!validFields)
+                
+                Button("Restore") {
+                    
+                    firstName = userPreferences.userData!.firstName
+                    lastName = userPreferences.userData!.lastName
+                    email = userPreferences.userData!.email
+                    
+                }
+                .buttonStyle(ButtonStylePrimaryColor1())
+                .disabled(!validFields)
+            }
             
-            
-            
+            Spacer()
             Button("Log out") {
                 
                 userPreferences.userData = nil
@@ -98,19 +121,6 @@ struct ProfileView: View {
             .buttonStyle(ButtonStyleYellowColorWide())
             Spacer(minLength: 20)
             
-            
-            Button("Save") {
-                
-                if firstName.isEmpty || lastName.isEmpty || email.isEmpty {
-                    responseMessage = "Please fill all fields"
-                    return
-                }
-                let userData = UserData(firstName: firstName, lastName: lastName, email: email)
-                userPreferences.userData = userData
-            }
-            .buttonStyle(ButtonStylePrimaryColor1())
-            .disabled(!validFields)
-        
             
         }
         .onAppear {

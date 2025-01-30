@@ -43,8 +43,9 @@ struct OnboardingView: View {
                 
             }.textFieldStyle(.roundedBorder)
                 .padding()
+                .disableAutocorrection(true)
             
-            Text(responseMessage)
+            Text(responseMessage).foregroundStyle(.red)
             
             
             Button("Next") {
