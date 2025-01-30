@@ -22,24 +22,28 @@ struct OnboardingView: View {
         VStack {
             Header().environmentObject(userPreferences)
             
-            Hero()
-         
-            HStack{
-                Text("Name")
-                TextField("add you name", text: $name)
-            }
+            Hero().padding()
+                .background(Color.primaryColor1)
+                .frame(maxHeight: 200)
+            VStack{
+                HStack{
+                    Text("Name")
+                    TextField("add you name", text: $name)
+                }
+                
+                HStack{
+                    Text("Surname")
+                    TextField("add your surname", text: $surname)
+                }
+                
+                HStack{
+                    Text("email")
+                    TextField("add your email", text: $email)
+                }
+                
+            }.textFieldStyle(.roundedBorder)
+                .padding()
             
-            HStack{
-                Text("Surname")
-                TextField("add your surname", text: $surname)
-            }
-           
-            HStack{
-                Text("email")
-                TextField("add your email", text: $email)
-            }
-           
-    
             Text(responseMessage)
             
             
@@ -53,6 +57,9 @@ struct OnboardingView: View {
                 userPreferences.userData = UserData(firstName :  name, lastName : surname, email : email)
                 
             }
+            .buttonStyle(ButtonStyleYellowColorWide())
+            
+            Spacer()
             
            
         }
