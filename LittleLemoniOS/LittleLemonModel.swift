@@ -14,7 +14,7 @@ class LittleLemonModel
     
     @MainActor func fetchMenu(completion: @escaping (Result<MenuNetwork, Error>) -> Void)  {
         
-       // PersistenceController.preview.clearDataBase()
+        PersistenceController.preview.clearDataBase()
         
         URLSession.shared.dataTask(with: URL(string: "https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu.json")!) { data, response, error   in
             guard let data else {

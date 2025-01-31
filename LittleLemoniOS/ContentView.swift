@@ -19,16 +19,12 @@ struct ContentView: View {
     
     var body: some View {
         
-        
-        NavigationView {
-           
             if userPreference.isLoggedIn {
                 HomeView().environment(\.managedObjectContext, viewContext).environmentObject(userPreference)
             }
             else{
                 OnboardingView().environmentObject(userPreference)
             }
-        }
     }
     
 }
